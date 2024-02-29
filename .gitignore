@@ -4,8 +4,6 @@
 # Ignore Excel files
 *.xls
 
-# Ignore log files
-*.log
 
 
 
