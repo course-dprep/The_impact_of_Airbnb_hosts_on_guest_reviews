@@ -1,4 +1,4 @@
-# How can are Airbnb hosts positively influence their reviews?
+# How can Airbnb hosts positively influence their reviews?
 
 In this respitory we dive into how Airbnb Hosts influence their guests' experiences, as seen through the lens of their reviews. In addition we offer practical recommendations tailored for both Airbnb and its hosts, aimed at enhancing their services to improve their reviews and guests'experiences.
 
