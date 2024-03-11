@@ -159,8 +159,8 @@ download_and_process_airbnb_data <- function(url, region, country) {
 }
 
 # EXAMPLE for Greece datasets...
-athens_data <- download_and_process_data(url_Athens, "Athens", "Greece")
-crete_data <- download_and_process_data(url_crete, "Crete", "Greece")
+athens_data <- download_and_process_airbnb_data(url_Athens, "Athens", "Greece")
+crete_data <- download_and_process_airbnb_data(url_crete, "Crete", "Greece")
 
 # ... and than combine the datasets for Greece
 partial_greece_data <- bind_rows(athens_data, crete_data)
