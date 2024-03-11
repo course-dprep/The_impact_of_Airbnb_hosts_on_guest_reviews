@@ -4,7 +4,7 @@ In this respitory we dive into how Airbnb Hosts influence their guests' experien
 
 ## Research motivation
 
-In an article from Elsevier (https://www-sciencedirect-com.tilburguniversity.idm.oclc.org/science/article/pii/S0278431917307491?casa_token=LwHcyn2IMLcAAAAA:DMpHe_sUw9c2yhfjKSd2MRoi3LbViQ7Sx503VFq3E5DuASjRJe5S5srZQ97KLfzo4U3vGiIUMg), it becomes clear that three important aspects influence a guest's stay: amenities, location and the host. Because hosts have only limited influence over amentities and locatin, it is evident thay they themselves have the greatest impact on their guests' experience. Therefore our team has focussed on researching which variables related to the host have the greatest influence on the guest experience and how this results in better reviews.
+In an article from [Elsevier](https://www-sciencedirect-com.tilburguniversity.idm.oclc.org/science/article/pii/S0278431917307491?casa_token=LwHcyn2IMLcAAAAA:DMpHe_sUw9c2yhfjKSd2MRoi3LbViQ7Sx503VFq3E5DuASjRJe5S5srZQ97KLfzo4U3vGiIUMg), it becomes clear that three important aspects influence a guest's stay: amenities, location and the host. Because hosts have only limited influence over amentities and locatin, it is evident thay they themselves have the greatest impact on their guests' experience. Therefore our team has focussed on researching which variables related to the host have the greatest influence on the guest experience and how this results in better reviews.
 
 ### Research guestion
 
