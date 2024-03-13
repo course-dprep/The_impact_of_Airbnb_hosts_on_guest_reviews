@@ -31,7 +31,7 @@ download.file(url_Lyon, "Lyon_data.csv.gz", mode = "wb")
 download.file(url_Paris, "Paris_data.csv.gz", mode = "wb")
 download.file(url_Pays_Basque, "Pays_Basque_data.csv.gz", mode = "wb")
 
-# Step 3.1 Converting all the csv.gz files to csv files
+# Step 4 Converting all the csv.gz files to csv files
 # Encapsulating all the code related to each URL, including downloading, decompressing, reading, and saving the CSV file.
 # Creating vectors of the urls
 urls_greece <- c("Athens_data.csv.gz", "Crete_data.csv.gz", "South_Aegean_data.csv.gz", "Thessaloniki_data.csv.gz")
@@ -107,13 +107,13 @@ write.csv(Pays_Basque_Host_Review_data, "Pays_Basque_Host_Review_data.csv", row.
 Athens_Host_Review_data <- Athens_Host_Review_data %>% mutate(Region_Dataset="Athens", Country_Dataset='Greece')
 
 #Crete
-Crete_Host_Review_data <- Crete_Host_Review_data %>% mutate(Region_Dataset="Athens", Country_Dataset='Greece')
+Crete_Host_Review_data <- Crete_Host_Review_data %>% mutate(Region_Dataset="Crete", Country_Dataset='Greece')
 
 #South_Aegean
-South_Aegean_Host_Review_data <- South_Aegean_Host_Review_data %>% mutate(Region_Dataset="Athens", Country_Dataset='Greece')
+South_Aegean_Host_Review_data <- South_Aegean_Host_Review_data %>% mutate(Region_Dataset="South_Aegean", Country_Dataset='Greece')
 
 #Thessaloniki
-Thessaloniki_Host_Review_data <- Thessaloniki_Host_Review_data %>% mutate(Region_Dataset="Athens", Country_Dataset='Greece')
+Thessaloniki_Host_Review_data <- Thessaloniki_Host_Review_data %>% mutate(Region_Dataset="Thessaloniki", Country_Dataset='Greece')
 
 #Adding the variables to the data of the regions in France
 #Bodreaux
@@ -136,13 +136,57 @@ View(Greece_Host_reviews)
 
 #Creating the dataset for France
 France_Host_reviews <- bind_rows(Bordeaux_Host_Review_data, Lyon_Host_Review_data, Paris_Host_Review_data, Pays_Basque_Host_Review_data)
-write.csv(France_Host_reviews, "Greece_Host_reviews.csv", row.names = TRUE)
+write.csv(France_Host_reviews, "France_Host_reviews.csv", row.names = TRUE)
 View(France_Host_reviews)
 
 #Well done you just created 2 datasets. One called Greece_Host_reviews and one called France_Host_reviews -> Checking origin variable errors!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#Step 10 Possible in the future to combine the Greece and France dataset. By using a simular principle of creating the country datasets
 
+#Step 10 Combining the Greece and France dataset. By using a simular principle of creating the country datasets
+Data_Greece_France <- bind_rows(Greece_Host_reviews, France_Host_reviews)
+write.csv(Data_Greece_France, "Data_Greece_France", row.names = TRUE)
+View(Data_Greece_France)
 
+# Getting insights in the data by looking at the regions
+region_counts <- table(Data_Greece_France$Region_Dataset)
+print(region_counts)
+# Found a mistake in the region name so adjusted it so the dataset is right!
+
+# Step 11: the regression
+# Loading the data
+Data_Greece_France <- read.csv("Data_Greece_France")
+
+# Encoding the variables profile picture, idenity verified and country as dummy variables
+Data_Greece_France <- within(Data_Greece_France, {
+  host_has_profile_pic <- as.numeric(host_has_profile_pic == "t") #true=1
+  host_identity_verified <- as.numeric(host_identity_verified == "t") #true=1
+  Country_Dataset <- as.numeric(Country_Dataset == "Greece") #Greece=1
+})
+
+View(Data_Greece_France)
+
+# Regression option 1: scores value
+Host_Review_lm1 <- lm(review_scores_value ~ host_has_profile_pic + host_identity_verified + Country_Dataset, Data_Greece_France)
+summary(Host_Review_lm1)
+
+# Regression option 2; scores rating
+Host_Review_lm2 <- lm(review_scores_rating ~ host_has_profile_pic + host_identity_verified + Country_Dataset, Data_Greece_France)
+summary(Host_Review_lm2)
+
+###################################TRYING VISUALISATION####################################
+library(broom)
+Host_Review <- augment(Host_Review_lm1)
+library(ggplot2)
+ggplot(Host_Review, aes(.resid)) + geom_histogram(aes(y = after_stat(density)), binwidth = 5) + stat_function(fun = dnorm, args = list(mean = mean(Host_Review$.resid), sd = sd(Host_Review$.resid)), color="red", linewidth=1)
+plot(Host_Review_lm1, which=1)
+
+# Line graph; does not work
+agg_data <- aggregate(review_scores_rating ~ Country_Dataset + host_has_profile_pic + host_identity_verified, data = Data_Greece_France, FUN = mean)
+ggplot(agg_data, aes(x = Country_Dataset, y = review_scores_rating, color = factor(host_has_profile_pic), linetype = factor(host_identity_verified))) +
+  geom_line() +
+  labs(x = "Country", y = "Mean Review Score", color = "Profile Picture", linetype = "Identity Verified") +
+  scale_color_manual(values = c("FALSE" = "blue", "TRUE" = "red"), labels = c("No Profile Pic", "Profile Pic")) +
+  scale_linetype_manual(values = c("FALSE" = "dashed", "TRUE" = "solid"), labels = c("Not Verified", "Verified")) +
+  theme_minimal()
 
 
 
