@@ -152,7 +152,6 @@ print(region_counts)
 # Found a mistake in the region name so adjusted it so the dataset is right!
 
 # Step 11: the regression
-# Loading the data
 Data_Greece_France <- read.csv("Data_Greece_France")
 
 # Encoding the variables profile picture, idenity verified and country as dummy variables
@@ -172,22 +171,29 @@ summary(Host_Review_lm1)
 Host_Review_lm2 <- lm(review_scores_rating ~ host_has_profile_pic + host_identity_verified + Country_Dataset, Data_Greece_France)
 summary(Host_Review_lm2)
 
+# Step 12: Calculate mean review scores rating by host profile picture and country
+library(dplyr)
+mean_review_scores_profilepic <- Data_Greece_France %>%
+  group_by(host_has_profile_pic, Country_Dataset) %>%
+  summarise(mean_review_score = mean(review_scores_rating, na.rm = TRUE))
+mean_review_scores_identity <- Data_Greece_France %>%
+  group_by(host_identity_verified, Country_Dataset) %>%
+  summarise(mean_review_score = mean(review_scores_rating, na.rm = TRUE))
+
+# Grouping values table
+print(mean_review_scores_profilepic)
+print(mean_review_scores_identity)
+
 ###################################TRYING VISUALISATION####################################
-library(broom)
-Host_Review <- augment(Host_Review_lm1)
+# Step 13: visualisation, barplot
 library(ggplot2)
-ggplot(Host_Review, aes(.resid)) + geom_histogram(aes(y = after_stat(density)), binwidth = 5) + stat_function(fun = dnorm, args = list(mean = mean(Host_Review$.resid), sd = sd(Host_Review$.resid)), color="red", linewidth=1)
-plot(Host_Review_lm1, which=1)
-
-# Line graph; does not work
-agg_data <- aggregate(review_scores_rating ~ Country_Dataset + host_has_profile_pic + host_identity_verified, data = Data_Greece_France, FUN = mean)
-ggplot(agg_data, aes(x = Country_Dataset, y = review_scores_rating, color = factor(host_has_profile_pic), linetype = factor(host_identity_verified))) +
-  geom_line() +
-  labs(x = "Country", y = "Mean Review Score", color = "Profile Picture", linetype = "Identity Verified") +
-  scale_color_manual(values = c("FALSE" = "blue", "TRUE" = "red"), labels = c("No Profile Pic", "Profile Pic")) +
-  scale_linetype_manual(values = c("FALSE" = "dashed", "TRUE" = "solid"), labels = c("Not Verified", "Verified")) +
-  theme_minimal()
-
+ggplot(mean_review_scores, aes(x = host_has_profile_pic, y = mean_review_score, fill = Country_Dataset)) +
+  geom_bar(stat = "identity", position = "dodge", color = "green") +
+  labs(title = "Mean Review Scores Rating by Host Profile Picture and Country",
+       x = "Host Has Profile Picture",
+       y = "Mean Review Scores Rating",
+       fill = "Country") + 
+  scale_x_discrete(labels = c("False_Greece", "True_Greece", "False_France", "True_France"))
 
 
 ######################### FUNCTION 1##################################
