@@ -1,5 +1,8 @@
 #This dataset merges the datasets about Greece, it is created to examine the influence of the hosts on the review rating.
 
+setwd("C:/Users/HP/OneDrive/Documenten/M Marketing Analytics/Skills Data Preparation & Workflow Management/Week 6 dprep")
+getwd()
+
 #Step 2 Coding the url's of the datapackages to variables. This is done to ensure that the other code keeps working and only the url needs to be changed over time.
 #The url's to the datapackages of the regions in Greece
 url_Athens <- "http://data.insideairbnb.com/greece/attica/athens/2023-12-25/data/listings.csv.gz"
@@ -13,31 +16,47 @@ url_Lyon <- "http://data.insideairbnb.com/france/auvergne-rhone-alpes/lyon/2023-
 url_Paris <- "http://data.insideairbnb.com/france/ile-de-france/paris/2023-12-12/data/listings.csv.gz"
 url_Pays_Basque <- "http://data.insideairbnb.com/france/pyr%C3%A9n%C3%A9es-atlantiques/pays-basque/2023-12-18/data/listings.csv.gz"
 
-#Step 3 Downloading the datapackage using the url variable and naming the dataset to our liking for further coding automation.Note that we first provide the url variable and second the name we want our csv.file to have. Don't forget to include '.csv' at the end of naming it. 
-#Downloading the datapackages of the regions in Greece
-download.file(url_Athens, "Athens_data.csv")
-download.file(url_crete, "Crete_data.csv")
-download.file(url_South_Aegean, "South_Aegean_data.csv")
-download.file(url_thessaloniki, "Thessaloniki_data.csv")
+# Step 3 Downloading the datapackage using the url variable and naming the dataset to our liking for further coding automation.Note that we first provide the url variable and second the name we want our csv.file to have. Don't forget to include '.csv' at the end of naming it. 
+# Downloading the datapackages of the regions in Greece
+
+# Adjustment: changing the csv files to csv.gz and adding mode = "wb"
+download.file(url_Athens, "Athens_data.csv.gz", mode = "wb")
+download.file(url_crete, "Crete_data.csv.gz", mode = "wb")
+download.file(url_South_Aegean, "South_Aegean_data.csv.gz", mode = "wb")
+download.file(url_thessaloniki, "Thessaloniki_data.csv.gz", mode = "wb")
 
 #Downloading the datapackages of the regions in France
-download.file(url_Bordeaux, "Bordeaux_data.csv")
-download.file(url_Lyon, "Lyon_data.csv")
-download.file(url_Paris, "Paris_data.csv")
-download.file(url_Pays_Basque, "Pays_Basque_data.csv")
+download.file(url_Bordeaux, "Bordeaux_data.csv.gz", mode = "wb")
+download.file(url_Lyon, "Lyon_data.csv.gz", mode = "wb")
+download.file(url_Paris, "Paris_data.csv.gz", mode = "wb")
+download.file(url_Pays_Basque, "Pays_Basque_data.csv.gz", mode = "wb")
 
-#Step 4 Data is possibly compressed in the datafile, hence we need to decompress the files to get the data. 
-#Decompressing the datapackages of the regions in Greece
-system(paste("gzip -d", "Athens_data.csv"))
-system(paste("gzip -d", "Crete_data.csv"))
-system(paste("gzip -d", "South_Aegean_data.csv"))
-system(paste("gzip -d", "Thessaloniki_data.csv"))
+# Step 3.1 Converting all the csv.gz files to csv files
+# Encapsulating all the code related to each URL, including downloading, decompressing, reading, and saving the CSV file.
+# Creating vectors of the urls
+urls_greece <- c("Athens_data.csv.gz", "Crete_data.csv.gz", "South_Aegean_data.csv.gz", "Thessaloniki_data.csv.gz")
+urls_france <- c("Bordeaux_data.csv.gz", "Lyon_data.csv.gz", "Paris_data.csv.gz", "Pays_Basque_data.csv.gz")
 
-#Decompressing the datapackages of the regions in France
-system(paste("gzip -d", "Bordeaux_data.csv"))
-system(paste("gzip -d", "Lyon_data.csv"))
-system(paste("gzip -d", "Paris_data.csv"))
-system(paste("gzip -d", "Pays_Basque_data.csv"))
+# Greece
+for (url in urls_greece) {
+  greece <- gzfile(url, "r")
+  data <- read.csv(greece)
+  close(greece)
+
+  write.csv(data, gsub(".csv.gz", ".csv", url), row.names = FALSE)
+}
+
+#France
+for (url in urls_france) {
+  france <- gzfile(url, "r")
+  data <- read.csv(france)
+  close(france)
+  
+  write.csv(data, gsub(".csv.gz", ".csv", url), row.names = FALSE)
+}
+
+# Check if it worked
+list.files(pattern = ".csv$") #shows 8 csv files if correct
 
 #Step 5 Loading the data in the workspace to be able to wrangle the data
 library(dplyr) #Write if sequence to install it if that is needed
@@ -45,16 +64,16 @@ library(tidyverse) #See comment above
 library(data.table) #See comment above
 
 #Loading the data of the regions in Greece
-Athens_data <- read_csv("Athens_data.csv")
-Crete_data <- read_csv("Crete_data.csv")
-South_Aegean_data <- read_csv("South_Aegean_data.csv")
-Thessaloniki_data <- read_csv("Thessaloniki_data.csv")
+Athens_data <- read.csv("Athens_data.csv")
+Crete_data <- read.csv("Crete_data.csv")
+South_Aegean_data <- read.csv("South_Aegean_data.csv")
+Thessaloniki_data <- read.csv("Thessaloniki_data.csv")
 
 #Loading the data of the regions in France
-Bordeaux_data <- read_csv("Bordeaux_data.csv")
-Lyon_data <- read_csv("Lyon_data.csv")
-Paris_data <- read_csv("Paris_data.csv")
-Pays_Basque_data <- read_csv("Pays_Basque_data.csv")
+Bordeaux_data <- read.csv("Bordeaux_data.csv")
+Lyon_data <- read.csv("Lyon_data.csv")
+Paris_data <- read.csv("Paris_data.csv")
+Pays_Basque_data <- read.csv("Pays_Basque_data.csv")
 
 #Step 6 wrangle the datasets to create a new one that fits our research purpose. We want all the data about hosts and reviews, hence we select this and save this selection.
 #Wrangle the data of the regions in Greece
