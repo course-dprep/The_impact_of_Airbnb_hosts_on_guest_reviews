@@ -8,7 +8,7 @@ In an article from [Elsevier](https://www-sciencedirect-com.tilburguniversity.id
 
 ### Research guestion
 
-_To what extent does (i) the presence of a profile picture and (ii) the indentity verification of the host affect the review score (1-5) on Airbnb between France and Greece?_
+_To what extent does (i) the presence of a profile picture and (ii) the identity verification of the host affect the review score (1-5) on Airbnb between France and Greece?_
 
 ## Research method
 
