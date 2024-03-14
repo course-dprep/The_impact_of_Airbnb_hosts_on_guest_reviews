@@ -31,7 +31,7 @@ download.file(url_Lyon, "Lyon_data.csv.gz", mode = "wb")
 download.file(url_Paris, "Paris_data.csv.gz", mode = "wb")
 download.file(url_Pays_Basque, "Pays_Basque_data.csv.gz", mode = "wb")
 
-# Step 3.1 Converting all the csv.gz files to csv files
+# Step 4 Converting all the csv.gz files to csv files
 # Encapsulating all the code related to each URL, including downloading, decompressing, reading, and saving the CSV file.
 # Creating vectors of the urls
 urls_greece <- c("Athens_data.csv.gz", "Crete_data.csv.gz", "South_Aegean_data.csv.gz", "Thessaloniki_data.csv.gz")
@@ -107,13 +107,13 @@ write.csv(Pays_Basque_Host_Review_data, "Pays_Basque_Host_Review_data.csv", row.
 Athens_Host_Review_data <- Athens_Host_Review_data %>% mutate(Region_Dataset="Athens", Country_Dataset='Greece')
 
 #Crete
-Crete_Host_Review_data <- Crete_Host_Review_data %>% mutate(Region_Dataset="Athens", Country_Dataset='Greece')
+Crete_Host_Review_data <- Crete_Host_Review_data %>% mutate(Region_Dataset="Crete", Country_Dataset='Greece')
 
 #South_Aegean
-South_Aegean_Host_Review_data <- South_Aegean_Host_Review_data %>% mutate(Region_Dataset="Athens", Country_Dataset='Greece')
+South_Aegean_Host_Review_data <- South_Aegean_Host_Review_data %>% mutate(Region_Dataset="South_Aegean", Country_Dataset='Greece')
 
 #Thessaloniki
-Thessaloniki_Host_Review_data <- Thessaloniki_Host_Review_data %>% mutate(Region_Dataset="Athens", Country_Dataset='Greece')
+Thessaloniki_Host_Review_data <- Thessaloniki_Host_Review_data %>% mutate(Region_Dataset="Thessaloniki", Country_Dataset='Greece')
 
 #Adding the variables to the data of the regions in France
 #Bodreaux
@@ -136,14 +136,64 @@ View(Greece_Host_reviews)
 
 #Creating the dataset for France
 France_Host_reviews <- bind_rows(Bordeaux_Host_Review_data, Lyon_Host_Review_data, Paris_Host_Review_data, Pays_Basque_Host_Review_data)
-write.csv(France_Host_reviews, "Greece_Host_reviews.csv", row.names = TRUE)
+write.csv(France_Host_reviews, "France_Host_reviews.csv", row.names = TRUE)
 View(France_Host_reviews)
 
 #Well done you just created 2 datasets. One called Greece_Host_reviews and one called France_Host_reviews -> Checking origin variable errors!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#Step 10 Possible in the future to combine the Greece and France dataset. By using a simular principle of creating the country datasets
 
+#Step 10 Combining the Greece and France dataset. By using a simular principle of creating the country datasets
+Data_Greece_France <- bind_rows(Greece_Host_reviews, France_Host_reviews)
+write.csv(Data_Greece_France, "Data_Greece_France", row.names = TRUE)
+View(Data_Greece_France)
 
+# Getting insights in the data by looking at the regions
+region_counts <- table(Data_Greece_France$Region_Dataset)
+print(region_counts)
+# Found a mistake in the region name so adjusted it so the dataset is right!
 
+# Step 11: the regression
+Data_Greece_France <- read.csv("Data_Greece_France")
+
+# Encoding the variables profile picture, idenity verified and country as dummy variables
+Data_Greece_France <- within(Data_Greece_France, {
+  host_has_profile_pic <- as.numeric(host_has_profile_pic == "t") #true=1
+  host_identity_verified <- as.numeric(host_identity_verified == "t") #true=1
+  Country_Dataset <- as.numeric(Country_Dataset == "Greece") #Greece=1
+})
+
+View(Data_Greece_France)
+
+# Regression option 1: scores value
+Host_Review_lm1 <- lm(review_scores_value ~ host_has_profile_pic + host_identity_verified + Country_Dataset, Data_Greece_France)
+summary(Host_Review_lm1)
+
+# Regression option 2; scores rating
+Host_Review_lm2 <- lm(review_scores_rating ~ host_has_profile_pic + host_identity_verified + Country_Dataset, Data_Greece_France)
+summary(Host_Review_lm2)
+
+# Step 12: Calculate mean review scores rating by host profile picture and country
+library(dplyr)
+mean_review_scores_profilepic <- Data_Greece_France %>%
+  group_by(host_has_profile_pic, Country_Dataset) %>%
+  summarise(mean_review_score = mean(review_scores_rating, na.rm = TRUE))
+mean_review_scores_identity <- Data_Greece_France %>%
+  group_by(host_identity_verified, Country_Dataset) %>%
+  summarise(mean_review_score = mean(review_scores_rating, na.rm = TRUE))
+
+# Grouping values table
+print(mean_review_scores_profilepic)
+print(mean_review_scores_identity)
+
+###################################TRYING VISUALISATION####################################
+# Step 13: visualisation, barplot
+library(ggplot2)
+ggplot(mean_review_scores, aes(x = host_has_profile_pic, y = mean_review_score, fill = Country_Dataset)) +
+  geom_bar(stat = "identity", position = "dodge", color = "green") +
+  labs(title = "Mean Review Scores Rating by Host Profile Picture and Country",
+       x = "Host Has Profile Picture",
+       y = "Mean Review Scores Rating",
+       fill = "Country") + 
+  scale_x_discrete(labels = c("False_Greece", "True_Greece", "False_France", "True_France"))
 
 
 ######################### FUNCTION 1##################################
