@@ -45,7 +45,7 @@ for region in range(len(regions_list)):
     country = identifier.split(",",3)[-1]
     region = identifier.split(",",3)[0]
 
-    #Create a new variable that stores city, country and url in a temporaty dictionary
+    #Create a new variable that stores region, country and url in a temporaty dictionary
     region_info = {"Country": country, "Region": region, "Link": tmp_url}
     print(f"Saving download URL for {region}, {country} ({Region_counter}/{len(regions_list)})")
 
