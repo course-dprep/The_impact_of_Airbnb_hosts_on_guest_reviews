@@ -44,5 +44,6 @@ Here we explain how the code is run, when we automate it correctly we could refe
 
 ## Authors
 - [Julian Peters](https://github.com/JulianPetersIsCoding),     e-mail: j.a.m.peters@outlook.com
-
+- [Rolf Jens](https://github.com/RolfJens),  e-mail: r.p.jens@tilburguniversity.edu
+- 
 Voeg je naar hier je naam toe
