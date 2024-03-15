@@ -1,3 +1,5 @@
+#This file will be deleted after completing file 2.
+
 library(readr)
 library(dplyr)
 library(tidyverse)
