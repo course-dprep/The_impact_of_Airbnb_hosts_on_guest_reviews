@@ -3,3 +3,6 @@
 
 # Excluding excel files
 *.xls
+
+# Excluding Rhistory files
+*.Rhistory
