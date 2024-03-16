@@ -45,8 +45,13 @@ for region in range(len(regions_list)):
     country = identifier.split(",",3)[-1]
     region = identifier.split(",",3)[0]
 
+    #Encode the URLs to handle non-ASCII characters (#Added fix url, testing)
+    import urllib3
+    import urllib.parse
+    encoded_url = urllib.parse.quote(tmp_url, safe=':/')
+
     #Create a new variable that stores region, country and url in a temporaty dictionary
-    region_info = {"Country": country, "Region": region, "Link": tmp_url}
+    region_info = {"Country": country, "Region": region, "Link": encoded_url}
     print(f"Saving download URL for {region}, {country} ({Region_counter}/{len(regions_list)})")
 
     #Add the temporary dictionary to the list created above
