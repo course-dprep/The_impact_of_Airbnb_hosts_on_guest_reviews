@@ -1,3 +1,6 @@
+# Check where the csv file is downloaded 
+# Set the working directory for where the file is
+
 #Load required libraries
 library(readr)
 library(dplyr)
@@ -29,7 +32,7 @@ get_region_url <- function(region_name) {
 url_Athens <- get_region_url("Athens")
 url_Crete <- get_region_url("Crete")
 url_South_Aegean <- get_region_url("South Aegean")
-url_thessaloniki <- get_region_url("Thessaloniki")
+url_Thessaloniki <- get_region_url("Thessaloniki")
 #France
 url_Bordeaux <- get_region_url("Bordeaux")
 url_Lyon <- get_region_url("Lyon")
@@ -73,7 +76,7 @@ download_and_process_selected_airbnb_data <- function(url, region, country) {
 athens_selected_data <- download_and_process_selected_airbnb_data(url_Athens, "Athens", "Greece")
 crete_selected_data <- download_and_process_selected_airbnb_data(url_Crete, "Crete", "Greece")
 south_aegean_selected_data <- download_and_process_selected_airbnb_data(url_South_Aegean, "South Aegean", "Greece")
-thessaloniki_selected_data <- download_and_process_selected_airbnb_data(url_thessaloniki, "Thessaloniki", "Greece")
+thessaloniki_selected_data <- download_and_process_selected_airbnb_data(url_Thessaloniki, "Thessaloniki", "Greece")
 #France
 bordeaux_selected_data <- download_and_process_selected_airbnb_data(url_Bordeaux, "Bordeaux", "France")
 lyon_selected_data <- download_and_process_selected_airbnb_data(url_Lyon, "Lyon", "France")
@@ -85,6 +88,8 @@ pays_basque_selected_data <- download_and_process_selected_airbnb_data(url_Pays_
 France_Greece_selected_data <- bind_rows(athens_selected_data, crete_selected_data, south_aegean_selected_data, thessaloniki_selected_data, bordeaux_selected_data, lyon_selected_data, paris_selected_data, pays_basque_selected_data)
 write.csv(France_Greece_selected_data, "France_Greece_selected_data.csv", row.names = TRUE)
 View(France_Greece_selected_data)
+
+####### WE ARE MISSING THE VARIABLE FOR REGION AND COUNTRY #######
 
 #De functie van Rolf en Julian dient gecombineerd te worden.
 #Optimalisatie mogelijk bij stap 3. Dit zou een functie kunnen zijn, zodat het geschikt is voor meerdere regios die gecombineerd worden.
