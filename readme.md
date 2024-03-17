@@ -29,7 +29,7 @@ We provide concrete advice so that Airbnb and Airbnb hosts can benefit from our 
 ```
 - .gitignore
 - LICENCE
-- Tutorial_Making_Dataset_France_Greece.R
+- 
 - README.md
 
 ```
@@ -46,5 +46,4 @@ Here we explain how the code is run, when we automate it correctly we could refe
 - [Julian Peters](https://github.com/JulianPetersIsCoding),     e-mail: j.a.m.peters@outlook.com
 - [Rolf Jens](https://github.com/RolfJens),  e-mail: r.p.jens@tilburguniversity.edu
 - [Marc van Tergouw](https://github.com/MSvanTerggouw),  e-mail: m.s.vantergouw@tilburguniversity.edu
-
-Voeg je naar hier je naam toe
+- [Eline van Lopik](https://github.com/elinevanlopik), e-mail: e.vanlopik@tilburguniversity.edu
