@@ -29,7 +29,7 @@ We provide concrete advice so that Airbnb and Airbnb hosts can benefit from our 
 ```
 - src
 - .gitignore
-- LISENCE
+- LICENSE
 - README.md
 
 ```
