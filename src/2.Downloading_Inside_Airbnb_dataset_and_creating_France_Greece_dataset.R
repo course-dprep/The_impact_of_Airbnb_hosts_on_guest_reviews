@@ -55,14 +55,13 @@ download_and_process_selected_airbnb_data <- function(url, region, country) {
   # Read data with the read_csv function
   data <- read_csv(file_name)
   
-  # Create a new csv file with only the selected variables
-  selected_data <- select(data, 
-                          host_id, host_url, host_has_profile_pic, host_identity_verified, review_scores_rating)
+  # Create a new csv file with only the selected variables starting with host and review. If you want to have a specific selection you can replace the starts with with the actual variable name
+  selected_data <- select(data, starts_with("host"), starts_with("review"))
   
   write.csv(selected_data, paste(region, "_selected_data.csv", sep = ""), row.names = TRUE)
   
   # Add the variables "Region" and "Country"
-  selected_data_data <- mutate(selected_data, Region_Dataset = region, Country_Dataset = country)
+  selected_data <- mutate(selected_data, Region_Dataset = region, Country_Dataset = country)
   
   # Return the modified data
   return(selected_data)
