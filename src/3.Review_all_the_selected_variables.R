@@ -16,7 +16,7 @@ summary_statistics <- function(dataset_path) {
 }
 
 #To retrieve the summary results use the function
-summary_results <- summary_statistics("Inside_Airbnb_Final_Dataset.csv")
+summary_results <- summary_statistics("France_Greece_selected_data.csv")
 
 #To see the summary print the variable
 print(summary_results)
