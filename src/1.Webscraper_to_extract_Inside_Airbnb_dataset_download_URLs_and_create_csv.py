@@ -39,19 +39,14 @@ Region_counter = 0
 for region in range(len(regions_list)):
     Region_counter += 1
     #Extracting the region name with "a" and the URL with "href"
-    tmp_url = regions_list[region].find("a").get('href')
+    tmp_url = regions_list[region].find("a").get('href').encode('latin1').decode('utf-8')
     #Adding the country and region to the region that was just scraped
     identifier = identifier_list[region].text
     country = identifier.split(",",3)[-1]
     region = identifier.split(",",3)[0]
 
-    #Encode the URLs to handle non-ASCII characters (#Added fix url, testing)
-    import urllib3
-    import urllib.parse
-    encoded_url = urllib.parse.quote(tmp_url, safe=':/')
-
     #Create a new variable that stores region, country and url in a temporaty dictionary
-    region_info = {"Country": country, "Region": region, "Link": encoded_url}
+    region_info = {"Country": country, "Region": region, "Link": tmp_url}
     print(f"Saving download URL for {region}, {country} ({Region_counter}/{len(regions_list)})")
 
     #Add the temporary dictionary to the list created above
