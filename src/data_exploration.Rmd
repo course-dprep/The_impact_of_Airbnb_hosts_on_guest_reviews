@@ -1,0 +1,163 @@
+---
+title: "Data_exploration"
+author: "Group_4"
+output: pdf_document
+date: "2024-03-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Data exploration
+
+This is an R Markdown document where the exploration of the raw data can be found.
+
+```{r, include=FALSE}
+# Load packages
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r, include=FALSE}
+# Download the data 
+all_data <- read_csv("France_Greece_selected_data.csv")
+```
+
+## Summary statistics
+We start with some summary statistics based on the raw data to see for example which variables are characters and to see some basic statistical insights, such as means and medians. 
+
+```{r}
+summary(all_data)
+```
+
+## Observations per region
+Several datasets of Greece and France have been merged. Therefore, we look at how many observations each country and each region has in the dataset.
+
+```{r}
+# Observations per country
+country_counts <- table(all_data$Country_Dataset)
+print(country_counts)
+```
+
+```{r}
+# Observations per region
+region_counts <- table(all_data$Region_Dataset)
+print(region_counts)
+```
+
+## Observations for hosts
+As this research is about the impact of hosts on guest reviews, we will provide the observation count for some of the host variables.
+
+```{r}
+# Observations for presence of profile pictures
+profilepic_counts <- table(all_data$host_has_profile_pic)
+print(profilepic_counts)
+```
+
+```{r}
+# Observations for presence of verified identity
+identity_verified_counts <- table(all_data$host_identity_verified)
+print(identity_verified_counts)
+```
+
+```{r}
+# Observations for host response time
+responsetime_counts <- table(all_data$host_response_time)
+print(responsetime_counts)
+```
+
+```{r}
+# Observations for presence of superhost status
+superhost_counts <- table(all_data$host_is_superhost)
+print(superhost_counts)
+```
+
+## Review scores per region
+We will provide the average review rating per country and region
+
+```{r}
+# Average review score per country
+review_score_country <- all_data %>%
+  group_by(Country_Dataset) %>%
+  summarise(mean_review_score = mean(review_scores_rating, na.rm = TRUE))
+
+review_score_country
+```
+
+```{r}
+# Average review score per region
+review_score_region <- all_data %>%
+  group_by(Country_Dataset, Region_Dataset) %>%
+  summarise(mean_review_score = mean(review_scores_rating, na.rm = TRUE))
+
+review_score_region
+```
+
+## Host variables + review scores
+We will explore some key statistics related to some host variables and their review scores.
+
+```{r}
+# Average review scores for the presence of a profile pic
+review_score_profilepic <- all_data %>%
+  group_by(host_has_profile_pic) %>%
+  summarise(mean_review_score = mean(review_scores_rating, na.rm = TRUE))
+
+review_score_profilepic
+```
+
+```{r}
+# Average review scores for the presence of a verified identity
+review_score_verification <- all_data %>%
+  group_by(host_identity_verified) %>%
+  summarise(mean_review_score = mean(review_scores_rating, na.rm = TRUE))
+
+review_score_verification
+```
+
+```{r}
+# Average review scores for the presence of a superhost status
+review_score_superhost <- all_data %>%
+  group_by(host_is_superhost) %>%
+  summarise(mean_review_score = mean(review_scores_rating, na.rm = TRUE))
+
+review_score_superhost
+```
+
+## Visualizations for the host variables + review scores
+To create a visual oversight of the host variables and their respective review scores, the following visualization have been created:
+
+``` {r}
+# Average review scores for the presence of a profile pic
+bar_plot_profilepic <- ggplot(review_score_profilepic, aes(x = host_has_profile_pic, y = mean_review_score)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  coord_cartesian(ylim = c(4, 5)) +  
+  labs(x = "Profile Picture", y = "Mean Review Score") +
+  ggtitle("Average Review Scores for the Presence of a Profile Picture")
+
+bar_plot_profilepic
+
+```
+
+``` {r}
+# Average review scores for the presence of a verified identity
+bar_plot_identity <- ggplot(review_score_verification, aes(x = host_identity_verified, y = mean_review_score)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  coord_cartesian(ylim = c(4, 5)) +  
+  labs(x = "Profile Picture", y = "Mean Review Score") +
+  ggtitle("Average Review Scores for the Presence of a verified identity")
+
+bar_plot_identity
+```
+
+``` {r}
+# Average review scores for the presence of a verified identity
+bar_plot_superhost <- ggplot(review_score_superhost, aes(x = host_is_superhost, y = mean_review_score)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  coord_cartesian(ylim = c(4, 5)) +  
+  labs(x = "Profile Picture", y = "Mean Review Score") +
+  ggtitle("Average Review Scores for the Presence of a superhost status")
+
+bar_plot_superhost
+```
