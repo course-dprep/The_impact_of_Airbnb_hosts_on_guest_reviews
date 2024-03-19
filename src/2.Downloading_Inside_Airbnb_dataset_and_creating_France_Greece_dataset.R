@@ -1,7 +1,3 @@
-# First get your Inside_Airbnb_URL_Dataset by setting the working directory
-setwd("C:/Users/HP/OneDrive/Documenten/M Marketing Analytics/Skills Data Preparation & Workflow Management/Week 6 dprep")
-getwd()
-
 # Load required packages
 library(readr)
 library(dplyr)
