@@ -22,7 +22,7 @@ library(ggplot2)
 
 ```{r, include=FALSE}
 # Download the data 
-all_data <- read_csv("France_Greece_selected_data.csv")
+all_data <- read_csv("Gen/data-preparation/output/Inside_Airbnb_Final_Dataset.csv")
 ```
 
 ## Summary statistics
@@ -33,7 +33,7 @@ summary(all_data)
 ```
 
 ## Observations per region
-Several datasets of Greece and France have been merged. Therefore, we look at how many observations each country and each region has in the dataset.
+Several datasets have been merged to create the final France and Greece dataset. Therefore, we look at how many observations each country and each region has in the dataset.
 
 ```{r}
 # Observations per country
