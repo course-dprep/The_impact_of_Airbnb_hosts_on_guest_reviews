@@ -55,14 +55,20 @@ for region in range(len(regions_list)):
 #Now we save this list to a csv file
 #Import the pandas datapackage, this allows to create a csv file
 import pandas as pd
+import os
+
+# Create the directory
+save_path = 'Data'
+os.makedirs(save_path, exist_ok=True)
 
 # Create a dataframe with the variables country, regions and URLs
 df = pd.DataFrame(region_data)
 
 #Create a csv file of the final dataframe called "Inside_Airbnb_Final_Dataset.csv"
-df.to_csv("Inside_Airbnb_URL_Dataset.csv", index=False)
+file_path = os.path.join(save_path, 'Inside_Airbnb_URL_Dataset.csv')
+df.to_csv(file_path, index=False)
 
 # Create a text to show that the code was successful
-print("Saved all download URLs to src/Inside_Airbnb_URL_Dataset.csv")
+print("Saved all download URLs to Data")
 
 

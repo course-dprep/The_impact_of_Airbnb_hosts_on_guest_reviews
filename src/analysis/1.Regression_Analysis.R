@@ -1,4 +1,8 @@
 # The regression
+# Loading the dataset in the workspace
+#Eline om in de toekomst verwarring te voorkomen noem de variabele naar het bestand en pas je code hierop aan.
+Inside_Airbnb_Final_Dataset <- read.csv("Gen/data-preparation/output/Inside_Airbnb_Final_selected_Dataset.csv")
+
 # Opening the dataset
 View(Inside_Airbnb_Final_Dataset)
 
@@ -96,4 +100,4 @@ ggplot(coef_data, aes(x = variable, y = coef)[-1]) +
   geom_bar(stat = "identity") +
   labs(x = "Variable", y = "Coefficient")
 
-# Any other visualization?
+
