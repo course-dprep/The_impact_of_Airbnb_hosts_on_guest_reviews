@@ -82,6 +82,25 @@ paris_selected_data <- download_and_process_selected_airbnb_data(url_Paris, "Par
 pays_basque_selected_data <- download_and_process_selected_airbnb_data(url_Pays_Basque, "Pays Basque", "France")
 
 # Combining all the selected regions of Greece and France together to make a dataset called 'France_Greece_selected_data' in csv form
+Inside_Airbnb_Final_Dataset <- bind_rows(athens_selected_data, crete_selected_data, south_aegean_selected_data, thessaloniki_selected_data, bordeaux_selected_data, lyon_selected_data, paris_selected_data, pays_basque_selected_data)
+write.csv(Inside_Airbnb_Final_Dataset, "Inside_Airbnb_Final_Dataset.csv", row.names = TRUE)
+View(Inside_Airbnb_Final_Dataset)
+
+# Recoding some variables so the dataset is ready for the next steps
+# Encoding the variables profile picture, identity verified and country as dummy variables
+Inside_Airbnb_Final_Dataset <- within(Inside_Airbnb_Final_Dataset, {
+  host_has_profile_pic <- as.numeric(host_has_profile_pic == "TRUE") #true=1, false=0
+  host_identity_verified <- as.numeric(host_identity_verified == "TRUE") #true=1, false=0
+  Country_Dataset <- as.numeric(Country_Dataset == "Greece") #Greece=1
+})
+
+# Encoding the dummy variables
+Inside_Airbnb_Final_Dataset$Country_Dataset <- ifelse(Inside_Airbnb_Final_Dataset$Country_Dataset == 1, "Greece", "France")
+Inside_Airbnb_Final_Dataset$host_has_profile_pic <- ifelse(Inside_Airbnb_Final_Dataset$host_has_profile_pic == 1, "Profile_picture", "NO_profile picture")
+Inside_Airbnb_Final_Dataset$host_identity_verified <- ifelse(Inside_Airbnb_Final_Dataset$host_identity_verified == 1, "ID_verified", "ID_NOT verified")
+
+# Check whether the variables are encoded the right way
+View(Inside_Airbnb_Final_Dataset)
 France_Greece_selected_data <- bind_rows(athens_selected_data, crete_selected_data, south_aegean_selected_data, thessaloniki_selected_data, bordeaux_selected_data, lyon_selected_data, paris_selected_data, pays_basque_selected_data)
 write.csv(France_Greece_selected_data, "France_Greece_selected_data.csv", row.names = TRUE)
 View(France_Greece_selected_data)

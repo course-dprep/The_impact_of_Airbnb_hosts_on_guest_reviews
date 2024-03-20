@@ -1,36 +1,23 @@
-# Step 11: the regression
-# Opening the dataset; is this name right?
-Data_Greece_France <- read.csv("France_Greece_selected_data.csv")
-
-# Encoding the variables profile picture, identity verified and country as dummy variables
-Data_Greece_France <- within(Data_Greece_France, {
-  host_has_profile_pic <- as.numeric(host_has_profile_pic == "t") #true=1
-  host_identity_verified <- as.numeric(host_identity_verified == "t") #true=1
-  Country_Dataset <- as.numeric(Country_Dataset == "Greece") #Greece=1
-})
-
-# Encoding the dummy variables
-Data_Greece_France$Country_Dataset <- ifelse(Data_Greece_France$Country_Dataset == 1, "Greece", "France")
-Data_Greece_France$host_has_profile_pic <- ifelse(Data_Greece_France$host_has_profile_pic == 1, "Profile_picture", "NO_profile picture")
-Data_Greece_France$host_identity_verified <- ifelse(Data_Greece_France$host_identity_verified == 1, "ID_verified", "ID_NOT verified")
-
-# Check whether the variables are the way they should
-View(Data_Greece_France)
+# The regression
+# Opening the dataset
+View(Inside_Airbnb_Final_Dataset)
 
 # Regression on the review scores rating
-Host_Review_lm <- lm(review_scores_rating ~ host_has_profile_pic + host_identity_verified + Country_Dataset, Data_Greece_France)
+# Regression of each variable on the review score rating
+Host_Review_lm <- lm(review_scores_rating ~ host_has_profile_pic * host_identity_verified * Country_Dataset, Inside_Airbnb_Final_Dataset)
 summary(Host_Review_lm)
 
-# Step 12: Calculate mean review scores rating by host profile picture and country
+# Calculate the mean review scores rating by host profile picture and country
 library(dplyr)
-average_ratings_profilepic <- tapply(Data_Greece_France$review_scores_rating, list(Data_Greece_France$Country_Dataset, Data_Greece_France$host_has_profile_pic), mean, na.rm = TRUE)
-average_ratings_identity <- tapply(Data_Greece_France$review_scores_rating, list(Data_Greece_France$Country_Dataset, Data_Greece_France$host_identity_verified), mean, na.rm = TRUE)
+average_ratings_profilepic <- tapply(Inside_Airbnb_Final_Dataset$review_scores_rating, list(Inside_Airbnb_Final_Dataset$Country_Dataset, Inside_Airbnb_Final_Dataset$host_has_profile_pic), mean, na.rm = TRUE)
+average_ratings_identity <- tapply(Inside_Airbnb_Final_Dataset$review_scores_rating, list(Inside_Airbnb_Final_Dataset$Country_Dataset, Inside_Airbnb_Final_Dataset$host_identity_verified), mean, na.rm = TRUE)
 
 # Table with average ratings on the variables
 print(average_ratings_profilepic)
 print(average_ratings_identity)
 
-# Step 13: Visualization 
+# Visualization 
+
 # Visualization of the average review score rating
 # Opening needed packages
 library(ggplot2)
@@ -66,10 +53,10 @@ dev.off()
 # Step 14: Data table showcasing all the effects
 # Including the coefficients, standard errors, p-values, and significance
 datatable <- data.table(
-  Coefficients = c(4.62790, -0.03170, -0.06148, -0.11275, 0.07257, 0.12356, 0.28815, -0.17887),
-  Standard_Error = c(0.02636, 0.02680, 0.02856, 0.05877, 0.02901, 0.05971, 0.06081, 0.06177),
-  P_Value = c(2e-16, 0.23680, 0.03138, 0.05506, 0.01236, 0.03852, 2.16e-06, 0.00378),
-  Significance = c("significant", "not significant", "significant", "not significant", "significant", "significant", "significant", "significant")
+  Coefficients = c(4.74031, -0.07679, -0.03875, -0.27412, 0.08669, 0.27739, 0.38644, -0.30163),
+  Standard_Error = c(0.02441, 0.02481, 0.02644, 0.05528, 0.02684, 0.05613, 0.05713, 0.05799),
+  P_Value = c(2e-16, 0.00197, 0.14269, 7.11e-07, 0.00124, 7.75e-07, 1.34e-11, 1.98e-07),
+  Significance = c("significant", "significant", "not significant", "significant", "significant", "significant", "significant", "significant")
 )
 
 # Assign row names
@@ -88,15 +75,24 @@ datatable %>%
 
 # Step 15: Visualization of the linear regression
 # Interaction Plot for all pairs of independent variables
-ggplot(data, aes(x = host_has_profile_pic, y = review_scores_rating, color = host_identity_verified)) +
+ggplot(Inside_Airbnb_Final_Dataset, aes(x = host_has_profile_pic, y = review_scores_rating, color = host_identity_verified)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   labs(x = "Host Has Profile Pic", y = "Review Scores Rating", color = "Host Identity Verified") +
-  facet_wrap(~ "Country_Dataset")
+  facet_wrap(~ Country_Dataset)
 
+# NA's eruit, klopt deze zo?
+ggplot(na.omit(Inside_Airbnb_Final_Dataset), 
+       aes(x = host_has_profile_pic, y = review_scores_rating, color = host_identity_verified)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "Host Has Profile Pic", y = "Review Scores Rating", color = "Host Identity Verified") +
+  facet_wrap(~ Country_Dataset)
+
+#klopt nog niet!
 # Coefficients Plot (not done yet)
 coef_data <- data.frame(coef = coef(Host_Review_lm), variable = names(coef(Host_Review_lm)))
-ggplot(coef_data, aes(x = variable, y = coef)) +
+ggplot(coef_data, aes(x = variable, y = coef)[-1]) +
   geom_bar(stat = "identity") +
   labs(x = "Variable", y = "Coefficient")
 
