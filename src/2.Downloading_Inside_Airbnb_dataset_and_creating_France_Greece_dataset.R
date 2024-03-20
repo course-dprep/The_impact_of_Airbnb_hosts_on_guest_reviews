@@ -9,7 +9,7 @@ library(data.table)
 # Creating a function that creates an url variable from the webscraper including country, region and url
 # Function to extract the url from the scraped url dataset and call it 'get_region_url'
 get_region_url <- function(region_name) {
-  #Save the read dataset under a variable
+  #Save the read dataset under a variable. read.csv is chosen, because read_csv breaks the code. Enhancement not needed, because of the small size of the dataset. 
   url_data <- read.csv("Inside_Airbnb_URL_Dataset.csv")
   
   #Create a filter that matches the given region name and its url
