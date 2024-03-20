@@ -161,3 +161,4 @@ bar_plot_superhost <- ggplot(review_score_superhost, aes(x = host_is_superhost, 
 
 bar_plot_superhost
 ```
+
