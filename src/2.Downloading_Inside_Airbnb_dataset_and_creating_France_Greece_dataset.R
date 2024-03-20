@@ -1,9 +1,3 @@
-# The "Inside_Airbnb_URL_Dataset.csv" should be in the repository, check to make sure
-
-# First get your Inside_Airbnb_URL_Dataset by setting the working directory
-# Should look something like this: setwd("C/...The_impact_of_Airbnb_hosts_on_guest_reviews")
-setwd("C:/Users/HP/OneDrive/Documenten/M Marketing Analytics/Skills Data Preparation & Workflow Management/It support Julian/The_impact_of_Airbnb_hosts_on_guest_reviews")
-
 # Load required packages
 library(readr)
 library(dplyr)
@@ -107,3 +101,6 @@ Inside_Airbnb_Final_Dataset$host_identity_verified <- ifelse(Inside_Airbnb_Final
 
 # Check whether the variables are encoded the right way
 View(Inside_Airbnb_Final_Dataset)
+France_Greece_selected_data <- bind_rows(athens_selected_data, crete_selected_data, south_aegean_selected_data, thessaloniki_selected_data, bordeaux_selected_data, lyon_selected_data, paris_selected_data, pays_basque_selected_data)
+write.csv(France_Greece_selected_data, "France_Greece_selected_data.csv", row.names = TRUE)
+View(France_Greece_selected_data)
