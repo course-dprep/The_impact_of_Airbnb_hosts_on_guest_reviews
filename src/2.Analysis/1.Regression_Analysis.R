@@ -1,3 +1,14 @@
+# Opening needed packages
+install.packages("kableExtra")
+library(data.table)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+
+# Create an output file for Analysis
+dir.create("Gen/2.Analysis")
+dir.create("Gen/2.Analysis/output")
+
 # The regression
 # Loading the dataset in the workspace
 Inside_Airbnb_Final_Dataset <- read.csv("Gen/1.Data-preparation/output/Inside_Airbnb_Final_selected_Dataset.csv")
@@ -8,10 +19,6 @@ View(Inside_Airbnb_Final_Dataset)
 # Regression on the review scores rating
 Host_Review_lm <- lm(review_scores_rating ~ host_has_profile_pic_dummy * host_identity_verified_dummy * Country_Dataset, Inside_Airbnb_Final_Dataset)
 summary(Host_Review_lm)
-
-# Create an output file for Analysis
-dir.create("Gen/2.Analysis")
-dir.create("Gen/2.Analysis/output")
 
 # Extract coefficients, standard errors, p-values, and significance levels
 coefficients <- coef(Host_Review_lm)
@@ -40,14 +47,7 @@ print(average_ratings_profilepic)
 print(average_ratings_identity)
 
 # Visualization 
-
 # Visualization of the average review score rating
-# Opening needed packages
-library(data.table)
-library(ggplot2)
-library(knitr)
-library(kableExtra)
-
 # Barplot for the effect of the presence of a profile picture of the host and the country on review score ratings
 pdf("Gen/2.Analysis/output/barplot_profilepic.pdf")
 barplot(
@@ -102,7 +102,3 @@ print(coefficients_plot)
 # Save Coefficients Plot as PDF
 coefficients_plot_path <- "Gen/2.Analysis/output/coefficients_plot.pdf"
 ggsave(coefficients_plot_path, plot = coefficients_plot, device = "pdf")
-
-
-
-
