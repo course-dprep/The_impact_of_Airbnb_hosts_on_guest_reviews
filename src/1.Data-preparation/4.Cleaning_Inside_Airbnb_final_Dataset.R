@@ -3,7 +3,7 @@ library(dplyr)
 library(tidyverse)
 
 # Creating a data frame from the csv file
-df <- read.csv("Gen/data-preparation/output/Inside_Airbnb_Final_Dataset.csv")
+df <- read.csv("Gen/1.Data-preparation/output/Inside_Airbnb_Final_Dataset.csv")
 View(df)
 
 # Check unique values in the columns
@@ -19,4 +19,4 @@ df$host_has_profile_pic_dummy <- ifelse(df$host_has_profile_pic_dummy == "t", "P
 df$host_identity_verified_dummy <- ifelse(df$host_identity_verified_dummy == "t", "Identity verified", "Identity NOT verified")
 
 # Save the modified DataFrame to a new CSV file
-write.csv(df, "Gen/data-preparation/output/Inside_Airbnb_Final_selected_Dataset.csv", row.names = FALSE)
+write.csv(df, "Gen/1.Data-preparation/output/Inside_Airbnb_Final_selected_Dataset.csv", row.names = FALSE)

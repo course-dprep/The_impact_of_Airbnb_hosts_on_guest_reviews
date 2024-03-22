@@ -1,17 +1,10 @@
-#This file will be used to run every item in the sub src files
-#To follow the my_project example of Hannes in week 5 I use the subfiles analysis, data preparation and paper.
-#Notice that we need to shovel the files around to fit the needs of the subfiles, I made a setup. But we need to discuss it.
+all: 1.Data-preparation 2.Analysis
 
-all: data-preparation analysis Paper
+1.Data-preparation:
+	make -C src/1.Data-preparation
 
-data-preparation:
-	make -C src/data-preparation
-
-analysis:
-	make -C src/analysis
-
-paper: analysis
-	make -C src/paper
+2.Analysis:
+	make -C src/2.Analysis
 
 clean:
 	-rm -r data
