@@ -22,7 +22,7 @@ library(ggplot2)
 
 ```{r, include=FALSE}
 # Download the data 
-all_data <- read_csv("Gen/data-preparation/output/Inside_Airbnb_Final_Dataset.csv")
+all_data <- read_csv("Gen/1.Data-preparation/output/Inside_Airbnb_Final_Dataset.csv")
 ```
 
 ## Summary statistics
