@@ -1,8 +1,3 @@
-# Check where the file "Inside_Airbnb_URL_Dataset.csv" and place it where you want
-
-# Set your working directory
-setwd("C:/Users/HP/OneDrive/Documenten/M Marketing Analytics/Skills Data Preparation & Workflow Management/Groepsopdracht")
-
 # Load required packages
 library(readr)
 install.packages('dplyr')
