@@ -1,37 +1,21 @@
----
-title: "ReviewScoreRating"
-author: "Group_4"
-output: pdf_document
-date: "2024-03-21"
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{r, include=FALSE}
-library(utils)
-library(readr)
-library(tidyverse)
-library(dplyr)
+# Opening needed packages
+# install.packages("kableExtra")
 library(data.table)
 library(ggplot2)
 library(knitr)
 library(kableExtra)
 
-Inside_Airbnb_Final_Dataset <- read.csv("Gen/1.Data-preparation/output/Inside_Airbnb_Final_selected_Dataset.csv")
+# The regression
+# Loading the dataset in the workspace
+Inside_Airbnb_Final_Dataset <- read.csv("gen/selected_dataset.csv")
 
+# Opening the dataset
+# View(Inside_Airbnb_Final_Dataset)
+
+# Regression on the review scores rating
 Host_Review_lm <- lm(review_scores_rating ~ host_has_profile_pic_dummy * host_identity_verified_dummy * Country_Dataset, Inside_Airbnb_Final_Dataset)
 summary(Host_Review_lm)
-```
 
-# Visualization
-
-This is an R Markdown document to show the outcome of the linear regression performed on review score ratings of AirBnb's and the effect of the presence of a profile picture of the host, whether the identity of the host is verified and if there is a difference in the rating between Greece and France.
-
-We start with showing the results of the linear regression by providing a data table which show all the effects. It shows the coefficients, standard error, p-value and a clarification whether there is a significant effect of the variable or not. The datatable includes the solo effects as well as the interaction effects. 
-
-```{r}
 # Extract coefficients, standard errors, p-values, and significance levels
 coefficients <- coef(Host_Review_lm)
 standard_errors <- summary(Host_Review_lm)$coefficients[, "Std. Error"]
@@ -49,15 +33,8 @@ datatable <- data.table(
   Significance = significance
 )
 
-```
-
-The datatable shows that, except for identity verification, all the variables and interactions have a significant effect on the review score rating of an AirBnb.
-
-
-For some more insight in the effect we wanted to show the mean difference in review score rating between the countries and each of the variables profile picture and identity. Here you can see what on average is the difference between Greece and France
-
-```{r}
 # Calculate the mean review scores rating
+library(dplyr)
 average_ratings_profilepic <- tapply(Inside_Airbnb_Final_Dataset$review_scores_rating, list(Inside_Airbnb_Final_Dataset$Country_Dataset, Inside_Airbnb_Final_Dataset$host_has_profile_pic_dummy), mean, na.rm = TRUE)
 average_ratings_identity <- tapply(Inside_Airbnb_Final_Dataset$review_scores_rating, list(Inside_Airbnb_Final_Dataset$Country_Dataset, Inside_Airbnb_Final_Dataset$host_identity_verified_dummy), mean, na.rm = TRUE)
 
@@ -65,13 +42,10 @@ average_ratings_identity <- tapply(Inside_Airbnb_Final_Dataset$review_scores_rat
 print(average_ratings_profilepic)
 print(average_ratings_identity)
 
-```
-
-The mean differences can be presented in a barplot for each variable. 
-For the variable profile picture the following barplot exceeded from the regression.
-
-```{r}
+# Visualization 
+# Visualization of the average review score rating
 # Barplot for the effect of the presence of a profile picture of the host and the country on review score ratings
+pdf("gen/barplot_profilepic.pdf")
 barplot(
   height = average_ratings_profilepic,
   beside = TRUE,
@@ -81,13 +55,10 @@ barplot(
   ylab = "Average Review Score Rating",
 )
 legend("right", legend = rownames(average_ratings_profilepic), fill = c("lightblue", "lightgreen"))
+dev.off()
 
-```
-
-For identity of the host the barplot looks as follows.
-
-```{r}
 # Barplot for the effect of the identity verification of the host and the country on the review score ratings
+pdf("gen/barplot_identity.pdf")
 barplot(
   height = average_ratings_identity,
   beside = TRUE,
@@ -97,27 +68,33 @@ barplot(
   ylab = "Average Review Score Rating",
 )
 legend("right", legend = rownames(average_ratings_identity), fill = c("lightblue", "lightgreen"))
-```
+dev.off()
 
-The results of the linear regression on review score rating can also be shown in an interaction plot that shows the distribution.
-
-```{r}
-# Interaction Plot for all pairs of independent variables
-ggplot(Inside_Airbnb_Final_Dataset, aes(x = host_has_profile_pic_dummy, y = review_scores_rating, color = host_identity_verified_dummy)) +
+# Plot Interaction Plot for all pairs of independent variables
+interaction_plot <- ggplot(Inside_Airbnb_Final_Dataset, aes(x = host_has_profile_pic_dummy, y = review_scores_rating, color = host_identity_verified_dummy)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   labs(x = "Host Has Profile Pic", y = "Review Scores Rating", color = "Host Identity Verified") +
   facet_wrap(~ Country_Dataset)
-```
 
-The coefficients also show the effect. It displays how strong the variable has an effect and shows in which direction. To make this even more clear we created a coefficient plot.
+# Save Interaction Plot as PDF
+interaction_plot_path <- "gen/interaction_plot.pdf"
+ggsave(interaction_plot_path, plot = interaction_plot, device = "pdf")
 
-```{r}
-# Coefficients Plot
+# Plot Coefficients Plot
 # Excluding the intercept coefficient
 coef_data <- data.frame(coef = coef(Host_Review_lm)[-1], variable = names(coef(Host_Review_lm))[-1])
 
-ggplot(coef_data, aes(x = as.factor(1:7), y = coef)) +
+# Print coef_data to check its structure and values
+# print(coef_data)
+
+coefficients_plot <- ggplot(coef_data, aes(x = variable, y = coef)) +
   geom_bar(stat = "identity") +
   labs(x = "Variable", y = "Coefficient")
-```
+
+# Print the plot to check its appearance
+print(coefficients_plot)
+
+# Save Coefficients Plot as PDF
+coefficients_plot_path <- "gen/coefficients_plot.pdf"
+ggsave(coefficients_plot_path, plot = coefficients_plot, device = "pdf")
