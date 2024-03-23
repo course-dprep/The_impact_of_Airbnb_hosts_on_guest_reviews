@@ -1,8 +1,8 @@
 ---
-title: "review_score_rating"
+title: "review_score_ratings"
 author: "Group_4"
-output: pdf_document
 date: "2024-03-21"
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, include=FALSE}
+library(kableExtra)
 library(utils)
 library(readr)
 library(tidyverse)
@@ -18,9 +19,13 @@ library(data.table)
 library(ggplot2)
 library(knitr)
 library(kableExtra)
+```
 
+```{r, include=FALSE}
 Inside_Airbnb_Final_Dataset <- read.csv("../gen/selected_dataset.csv")
+```
 
+```{r, include=FALSE}
 Host_Review_lm <- lm(review_scores_rating ~ host_has_profile_pic_dummy * host_identity_verified_dummy * Country_Dataset, Inside_Airbnb_Final_Dataset)
 summary(Host_Review_lm)
 ```
@@ -29,32 +34,7 @@ summary(Host_Review_lm)
 
 This is an R Markdown document to show the outcome of the linear regression performed on review score ratings of AirBnb's and the effect of the presence of a profile picture of the host, whether the identity of the host is verified and if there is a difference in the rating between Greece and France.
 
-We start with showing the results of the linear regression by providing a data table which show all the effects. It shows the coefficients, standard error, p-value and a clarification whether there is a significant effect of the variable or not. The datatable includes the solo effects as well as the interaction effects. 
-
-```{r}
-# Extract coefficients, standard errors, p-values, and significance levels
-coefficients <- coef(Host_Review_lm)
-standard_errors <- summary(Host_Review_lm)$coefficients[, "Std. Error"]
-p_values <- summary(Host_Review_lm)$coefficients[, "Pr(>|t|)"]
-significance <- ifelse(p_values < 0.05, "significant", "not significant")
-
-# Creating a data table
-datatable <- data.table(
-  Effect = c("Intercept", "Profile picture", "Identity verification", "Country",
-             "Profile picture x Identity verification", "Profile picture x Country",
-             "Identity verification x Country", "Profile picture x Identity verification x Country"),
-  Coefficients = coefficients,
-  Standard_Error = standard_errors,
-  P_Value = p_values,
-  Significance = significance
-)
-
-```
-
-The datatable shows that, except for identity verification, all the variables and interactions have a significant effect on the review score rating of an AirBnb.
-
-
-For some more insight in the effect we wanted to show the mean difference in review score rating between the countries and each of the variables profile picture and identity. Here you can see what on average is the difference between Greece and France
+For some insight in the effect we wanted to show the mean difference in review score rating between the countries and each of the variables profile picture and identity. Here you can see what on average is the difference between Greece and France.
 
 ```{r}
 # Calculate the mean review scores rating
@@ -67,8 +47,7 @@ print(average_ratings_identity)
 
 ```
 
-The mean differences can be presented in a barplot for each variable. 
-For the variable profile picture the following barplot exceeded from the regression.
+The mean differences can be presented in a barplot for each variable. For the variable profile picture the following barplot exceeded from the regression.
 
 ```{r}
 # Barplot for the effect of the presence of a profile picture of the host and the country on review score ratings
@@ -121,3 +100,7 @@ ggplot(coef_data, aes(x = as.factor(1:7), y = coef)) +
   geom_bar(stat = "identity") +
   labs(x = "Variable", y = "Coefficient")
 ```
+
+In this coefficient the plot the variables were numbered 1-7 because the variabele names could not be displayed properly. They are numbered as follows: 1.Profile picture, 2.Identity verification, 3.Country, 4.Profile picture x Identity verification, 5.Profile picture x Country, 6.Identity verification x Country, 7.Profile picture x Identity verification x Country.
+
+Overall there seems to be an effect of the presence of a profile picture of the host on the review score ratings as well as an effect of the country. The variables also show interaction effects between all three variables. However, the linear regression also shows that the variance in the review score ratings can be explained by 1,4% of the variance in the variables, which means the variables are not good predictors. Therefore we would suggest researching other variables to see if they are better predictors for the review score ratings.
