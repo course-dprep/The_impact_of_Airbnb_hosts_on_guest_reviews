@@ -2,7 +2,7 @@
 title: "Data_exploration"
 author: "Group_4"
 output: pdf_document
-date: "2024-03-19"
+date: "2024-03-23"
 ---
 
 ```{r setup, include=FALSE}
@@ -18,12 +18,15 @@ This is an R Markdown document where the exploration of the raw data can be foun
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(pandoc)
 ```
 
 ```{r, include=FALSE}
 # Download the data 
-all_data <- read_csv("Gen/1.Data-preparation/output/Inside_Airbnb_Final_Dataset.csv")
+all_data <- read_csv("../gen/project_dataset.csv")
+
 ```
+
 
 ## Summary statistics
 We start with some summary statistics based on the raw data to see for example which variables are characters and to see some basic statistical insights, such as means and medians. 

@@ -1,9 +1,13 @@
 # Load required packages
 library(readr)
-install.packages('dplyr')
 library(dplyr)
 library(tidyverse)
 library(data.table)
+
+# Creating a place to save the files
+dir.create('gen')
+dir.create('gen/input_CSVs')
+dir.create('gen/output_CSVs')
 
 # Wrangling the data
 
@@ -11,7 +15,7 @@ library(data.table)
 # Function to extract the url from the scraped url dataset and call it 'get_region_url'
 get_region_url <- function(region_name) {
   #Save the read dataset under a variable. read.csv is chosen, because read_csv breaks the code. Enhancement not needed, because of the small size of the dataset. 
-  url_data <- read.csv("Data/Inside_Airbnb_URL_Dataset.csv")
+  url_data <- read.csv("input_URLs/airbnb_URLs.csv")
   
   #Create a filter that matches the given region name and its url
   region_url <- url_data %>%
@@ -39,18 +43,11 @@ url_Paris <- get_region_url("Paris")
 url_Pays_Basque <- get_region_url("Pays Basque")
 
 # Creating a function that wrangles the dataset to our selected regions and returns the selected data
-# Load required packages
-
-# Creating a place to save the files
-dir.create('Gen')
-dir.create('Gen/1.Data-preparation')
-dir.create('Gen/1.Data-preparation/input')
-dir.create('Gen/1.Data-preparation/output')
 
 # Function to extract the url from the scraped url dataset and call it 'get_region_url'
 get_region_url <- function(region_name) {
   #Save the read dataset under a variable.
-  url_data <- read.csv("Data/Inside_Airbnb_URL_Dataset.csv")
+  url_data <- read.csv("input_URLs/airbnb_URLs.csv")
   
   #Create a filter that matches the given region name and its url
   region_url <- url_data %>%
@@ -67,7 +64,7 @@ get_region_url <- function(region_name) {
 # Creating a function that wrangles the dataset to our selected regions and returns the selected data
 Create_Region_Dataset <- function(url, region, country) {
   # Downloading the needed dataset from the url and saving it to our wanted file
-  file_name <- paste0("Gen/1.Data-preparation/input/", region, ".csv")
+  file_name <- paste0("gen/input_CSVs/", region, ".csv")
   if (!file.exists(file_name)) {
     message("Downloading file from ", url)
     tryCatch(download.file(url, file_name, mode = "wb"), 
@@ -86,7 +83,7 @@ Create_Region_Dataset <- function(url, region, country) {
     mutate(Region_Dataset = region, Country_Dataset = country)
   
   # Define a new filename for the modified dataset and saving location
-  modified_file_name <- paste0("Gen/1.Data-preparation/output/", region, "_selected.csv")
+  modified_file_name <- paste0("gen/output_CSVs/", region, "_selected.csv")
   
   # Add this new selection to the dataset
   message("Writing to CSV file...")
@@ -111,5 +108,5 @@ paris_selected_data <- Create_Region_Dataset(url_Paris, "Paris", "France")
 pays_basque_selected_data <- Create_Region_Dataset(url_Pays_Basque, "Pays Basque", "France")
 
 # Combining all the selected regions of Greece and France together to make a dataset called 'France_Greece_selected_data' in csv form
-Inside_Airbnb_Final_Dataset <- bind_rows(athens_selected_data, crete_selected_data, south_aegean_selected_data, thessaloniki_selected_data, bordeaux_selected_data, lyon_selected_data, paris_selected_data, pays_basque_selected_data)
-write.csv(Inside_Airbnb_Final_Dataset, "Gen/1.Data-preparation/output/Inside_Airbnb_Final_Dataset.csv", row.names = FALSE)
+airbnb_URLs <- bind_rows(athens_selected_data, crete_selected_data, south_aegean_selected_data, thessaloniki_selected_data, bordeaux_selected_data, lyon_selected_data, paris_selected_data, pays_basque_selected_data)
+write.csv(airbnb_URLs, "gen/project_dataset.csv", row.names = FALSE)

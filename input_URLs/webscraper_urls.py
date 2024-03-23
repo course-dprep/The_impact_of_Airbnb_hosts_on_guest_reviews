@@ -1,5 +1,10 @@
 #Import the request datapackage, this allows web scraping
 import requests
+#Import the bs4 package to use the beautifulsoup function to turn our metadata to readable HTML code
+from bs4 import BeautifulSoup
+#Import the pandas datapackage, this allows to create a csv file
+import pandas as pd
+import os
 
 #Hardcode the url of the static website
 url = "http://insideairbnb.com/get-the-data"
@@ -9,9 +14,6 @@ request_object = requests.get(url)
 
 #Write a new variable that extracts the HTML source code
 source_code = request_object.text
-
-#Import the bs4 package to use the beautifulsoup function to turn our metadata to readable HTML code
-from bs4 import BeautifulSoup
 
 #Write a new variable storing the raw html code
 soup = BeautifulSoup(source_code, "html.parser")
@@ -52,23 +54,16 @@ for region in range(len(regions_list)):
     #Add the temporary dictionary to the list created above
     region_data.append(region_info)
 
-#Now we save this list to a csv file
-#Import the pandas datapackage, this allows to create a csv file
-import pandas as pd
-import os
-
 # Create the directory
-save_path = 'Data'
+save_path = "./input_URLs"
 os.makedirs(save_path, exist_ok=True)
 
 # Create a dataframe with the variables country, regions and URLs
 df = pd.DataFrame(region_data)
 
-#Create a csv file of the final dataframe called "Inside_Airbnb_Final_Dataset.csv"
-file_path = os.path.join(save_path, 'Inside_Airbnb_URL_Dataset.csv')
+# Create a csv file of the final dataframe called "airbnb_URLs.csv"
+file_path = os.path.join(save_path, 'airbnb_URLs.csv')
 df.to_csv(file_path, index=False)
 
 # Create a text to show that the code was successful
 print("Saved all download URLs to Data")
-
-
