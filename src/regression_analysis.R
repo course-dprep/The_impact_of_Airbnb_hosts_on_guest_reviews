@@ -5,9 +5,13 @@ library(ggplot2)
 library(knitr)
 library(kableExtra)
 
+# Creating a place to save the files
+dir.create('gen/analysis')
+dir.create('gen/analysis/output')
+
 # The regression
 # Loading the dataset in the workspace
-Inside_Airbnb_Final_Dataset <- read.csv("gen/selected_dataset.csv")
+Inside_Airbnb_Final_Dataset <- read.csv("gen/data_preparation/output/selected_dataset.csv")
 
 # Opening the dataset
 # View(Inside_Airbnb_Final_Dataset)
@@ -45,7 +49,7 @@ print(average_ratings_identity)
 # Visualization 
 # Visualization of the average review score rating
 # Barplot for the effect of the presence of a profile picture of the host and the country on review score ratings
-pdf("gen/barplot_profilepic.pdf")
+pdf("gen/analysis/output/barplot_profilepic.pdf")
 barplot(
   height = average_ratings_profilepic,
   beside = TRUE,
@@ -58,7 +62,7 @@ legend("right", legend = rownames(average_ratings_profilepic), fill = c("lightbl
 dev.off()
 
 # Barplot for the effect of the identity verification of the host and the country on the review score ratings
-pdf("gen/barplot_identity.pdf")
+pdf("gen/analysis/output/barplot_identity.pdf")
 barplot(
   height = average_ratings_identity,
   beside = TRUE,
@@ -78,7 +82,7 @@ interaction_plot <- ggplot(Inside_Airbnb_Final_Dataset, aes(x = host_has_profile
   facet_wrap(~ Country_Dataset)
 
 # Save Interaction Plot as PDF
-interaction_plot_path <- "gen/interaction_plot.pdf"
+interaction_plot_path <- "gen/analysis/output/interaction_plot.pdf"
 ggsave(interaction_plot_path, plot = interaction_plot, device = "pdf")
 
 # Plot Coefficients Plot
@@ -93,8 +97,8 @@ coefficients_plot <- ggplot(coef_data, aes(x = variable, y = coef)) +
   labs(x = "Variable", y = "Coefficient")
 
 # Print the plot to check its appearance
-print(coefficients_plot)
+# print(coefficients_plot)
 
 # Save Coefficients Plot as PDF
-coefficients_plot_path <- "gen/coefficients_plot.pdf"
+coefficients_plot_path <- "gen/analysis/output/coefficients_plot.pdf"
 ggsave(coefficients_plot_path, plot = coefficients_plot, device = "pdf")

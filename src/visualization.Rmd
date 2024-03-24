@@ -1,8 +1,10 @@
 ---
-title: "review_score_ratings"
+title: "visualization"
 author: "Group_4"
 date: "2024-03-21"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -10,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, include=FALSE}
+library(rmarkdown)
 library(kableExtra)
 library(utils)
 library(readr)
@@ -18,7 +21,7 @@ library(dplyr)
 library(data.table)
 library(ggplot2)
 library(knitr)
-library(kableExtra)
+library(pandoc)
 ```
 
 ```{r, include=FALSE}
@@ -30,7 +33,7 @@ Host_Review_lm <- lm(review_scores_rating ~ host_has_profile_pic_dummy * host_id
 summary(Host_Review_lm)
 ```
 
-# Visualization
+# Effect of the presence of a profile picture and the identity verification of the host on the review score rating in Greece and France
 
 This is an R Markdown document to show the outcome of the linear regression performed on review score ratings of AirBnb's and the effect of the presence of a profile picture of the host, whether the identity of the host is verified and if there is a difference in the rating between Greece and France.
 
@@ -44,7 +47,6 @@ average_ratings_identity <- tapply(Inside_Airbnb_Final_Dataset$review_scores_rat
 # Table with average ratings on the variables
 print(average_ratings_profilepic)
 print(average_ratings_identity)
-
 ```
 
 The mean differences can be presented in a barplot for each variable. For the variable profile picture the following barplot exceeded from the regression.
@@ -60,7 +62,6 @@ barplot(
   ylab = "Average Review Score Rating",
 )
 legend("right", legend = rownames(average_ratings_profilepic), fill = c("lightblue", "lightgreen"))
-
 ```
 
 For identity of the host the barplot looks as follows.
