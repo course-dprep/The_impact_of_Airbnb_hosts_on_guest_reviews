@@ -55,14 +55,14 @@ for region in range(len(regions_list)):
     region_data.append(region_info)
 
 # Create the directory
-save_path = "./input_URLs"
+save_path = "./data"
 os.makedirs(save_path, exist_ok=True)
 
 # Create a dataframe with the variables country, regions and URLs
 df = pd.DataFrame(region_data)
 
 # Create a csv file of the final dataframe called "airbnb_URLs.csv"
-file_path = os.path.join(save_path, 'airbnb_URLs.csv')
+file_path = os.path.join(save_path, 'airbnb_urls.csv')
 df.to_csv(file_path, index=False)
 
 # Create a text to show that the code was successful

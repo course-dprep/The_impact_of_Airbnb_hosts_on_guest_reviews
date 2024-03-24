@@ -1,56 +1,29 @@
-# Define variables
-SRC_DIR := src
-GEN_DIR := gen
-R_SCRIPTS := france_greece_dataset.R clean_dataset.R regression_analysis.R
-RMD_SCRIPTS := data_exploration.Rmd visualization.Rmd
+# Directory
+SRC_DIR = src
+DATA_DIR = data
+GEN_DIR = gen
 
-# Define targets
-all: $(R_SCRIPTS) $(RMD_SCRIPTS)
+# Files
+PY_SCRIPTS = $(wildcard $(SRC_DIR)/*.py)
+R_SCRIPTS = $(wildcard $(SRC_DIR)/*.R)
+RMD_FILES = $(wildcard $(SRC_DIR)/*.Rmd)
 
-# Rule to run R scripts
-%.R:
-	@echo "Running $@"
-	@R --vanilla < $(SRC_DIR)/$@
+# Targets
+.PHONY: all run knit
 
-# Rule to run R markdown files
-%.Rmd:
-	@echo "Running $@"
-	@R -e "rmarkdown::render('$(SRC_DIR)/$@')"
+all: run knit
 
-# Rule to clean generated files
+run:
+	python $(SRC_DIR)/webscraper_urls.py	
+	Rscript $(SRC_DIR)/france_greece_dataset.R
+	Rscript $(SRC_DIR)/clean_dataset.R
+	Rscript $(SRC_DIR)/regression_analysis.R
+
+knit: $(SRC_DIR)/data_exploration.Rmd $(SRC_DIR)/visualization.Rmd
+	Rscript -e "rmarkdown::render('$(SRC_DIR)/data_exploration.Rmd', output_file = '../data_exploration.html')"
+	Rscript -e "rmarkdown::render('$(SRC_DIR)/visualization.Rmd', output_file = '../visualization.html')"
+
 clean:
-	@echo "Cleaning generated files"
-	@if exist $(GEN_DIR) rmdir /s /q $(GEN_DIR)
-
-# Phony targets
-.PHONY: all clean
-
-# Hide commands during make -n
-.SILENT: all clean
-
-
-
-
-# Marc poging
-# all: src/france_greece_dataset.R 
-# 	R --vanilla < src/france_greece_dataset.R
-
-# gen_france_greece_dataset: src/france_greece_dataset.R 
-# 	R --vanilla < src/france_greece_dataset.R
-
-
-
-
-
-
-
-# old: 
-# 1.Data-preparation:
-# 	make -C src/1.Data-preparation
-
-# 2.Analysis:
-# 	make -C src/2.Analysis
-
-# clean:
-# 	-rm -r data
-# 	-rm -r gen
+	del /q $(DATA_DIR)\*.* $(GEN_DIR)\*.*
+	rmdir /s /q $(DATA_DIR)
+	rmdir /s /q $(GEN_DIR)

@@ -3,19 +3,24 @@ library(dplyr)
 library(tidyverse)
 
 # Creating a data frame from the csv file
-df <- read.csv("gen/project_dataset.csv")
+df <- read.csv("gen/data_preparation/output/project_dataset.csv")
 
 # Check unique values in the columns
 unique(df$host_has_profile_pic)
 unique(df$host_identity_verified)
 
-# Copy values of original variable to the dummy variable
-df$host_has_profile_pic_dummy <- df$host_has_profile_pic
-df$host_identity_verified_dummy <- df$host_identity_verified
-
 # Recode the dummy variables
-df$host_has_profile_pic_dummy <- ifelse(df$host_has_profile_pic_dummy == "t", "Profile picture", "No profile picture")
-df$host_identity_verified_dummy <- ifelse(df$host_identity_verified_dummy == "t", "Identity verified", "Identity NOT verified")
+df <- df %>%
+  mutate(host_has_profile_pic_dummy = case_when(
+    host_has_profile_pic == "t" ~ "Profile picture",
+    host_has_profile_pic == "f" ~ "No profile picture",
+    TRUE ~ NA_character_
+  ),
+  host_identity_verified_dummy = case_when(
+    host_identity_verified == "t" ~ "Identity verified",
+    host_identity_verified == "f" ~ "Identity NOT verified",
+    TRUE ~ NA_character_
+  ))
 
 # Save the modified DataFrame to a new CSV file
-write.csv(df, "gen/selected_dataset.csv", row.names = FALSE)
+write.csv(df, "gen/data_preparation/output/selected_dataset.csv", row.names = FALSE)
