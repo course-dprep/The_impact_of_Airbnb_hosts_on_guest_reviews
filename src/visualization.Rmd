@@ -26,7 +26,7 @@ library(pandoc)
 ```
 
 ```{r, include=FALSE}
-Inside_Airbnb_Final_Dataset <- read.csv("../gen/data_preparation/selected_dataset.csv")
+Inside_Airbnb_Final_Dataset <- read.csv("../gen/data_preparation/output/selected_dataset.csv")
 ```
 
 ```{r, include=FALSE}
