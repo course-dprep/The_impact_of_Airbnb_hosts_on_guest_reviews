@@ -3,6 +3,7 @@ title: "visualization"
 author: "Group_4"
 date: "2024-03-21"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
@@ -25,7 +26,10 @@ library(pandoc)
 ```
 
 ```{r, include=FALSE}
-Inside_Airbnb_Final_Dataset <- read.csv("../gen/selected_dataset.csv")
+Inside_Airbnb_Final_Dataset <- read.csv("../gen/data_preparation/selected_dataset.csv")
+```
+
+```{r, include=FALSE}
 ```
 
 ```{r, include=FALSE}

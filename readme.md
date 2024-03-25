@@ -1,11 +1,18 @@
 # How do Airbnb hosts influence the reviews of their listings? 
-This project dives into some of the different characteristics of an Airbnb host, which can influence the ratings of their listings. The goal was to find some statistical connections between specific variables and see how they impact the ratings. The project is done for the course "Data Preperation and Workflow Management" as part of the Masters degree Marketing Analytics on Tilburg University ([Course contents](https://dprep.hannesdatta.com/docs/course/)). 
+This project explores various factors influencing the ratings of Airbnb listings by analyzing host characteristics. It was completed as part of the "Data Preparation and Workflow Management" course in the Marketing Analytics Master's program at Tilburg University.
+
+For more details about the course, refer to the [course contents](https://dprep.hannesdatta.com/docs/course/).  
+
+To evaluate the results, navigate to the `src` folder and run the provided scripts. The full process has been automated by running the `makefile`.
+
 
 ## Academic goal 
-The goal of this course is to automate research projects and make it easy to reproduce results or make adjustments for other interests. For example, other researchers can look at different effects in the same environment, to look for other correlations between variables. 
+The primary objective of this course is to equip students with the skills necessary to automate research projects, facilitating reproducibility of results and enabling easy adjustments to cater to different research interests. For instance, researchers can leverage the provided tools and methodologies to explore alternative effects within the same dataset to uncover new relationships between variables.
 
 ## Research motivation
-There are three important aspects which influence a guest's stay: (i) amenities, (ii) location and (iii) the hosts ([source](https://www-sciencedirect-com.tilburguniversity.idm.oclc.org/science/article/pii/S0278431917307491?casa_token=LwHcyn2IMLcAAAAA:DMpHe_sUw9c2yhfjKSd2MRoi3LbViQ7Sx503VFq3E5DuASjRJe5S5srZQ97KLfzo4U3vGiIUMg)). This project will further look into which ways the hosts themselves influence the review scores, specifically their seemed (online) trustworthiness. The variables which are linked to this are (i) profile picture and (ii) identity verification. Additionaly, there could be differences in specific countries or even cities.This project zooms in on just two countries, which are Greece and France (both with 4 cities). Including this variable should give some insights in how the customers differ their judgement in other countries. 
+Guest satisfaction during their stay is influenced by three crucial factors: amenities, location, and the behavior of hosts (Source: [Journal of Hospitality Management](https://www-sciencedirect-com.tilburguniversity.idm.oclc.org/science/article/pii/S0278431917307491?casa_token=LwHcyn2IMLcAAAAA:DMpHe_sUw9c2yhfjKSd2MRoi3LbViQ7Sx503VFq3E5DuASjRJe5S5srZQ97KLfzo4U3vGiIUMg)). This project aims to delve deeper into the ways hosts influence review scores, focusing specifically on their perceived trustworthiness online. Key variables associated with this analysis include the host's profile picture and identity verification.
+
+Furthermore, the project seeks to explore potential differences across countries, with particular emphasis on France and Greece. While data for four cities within each country is available, this study concentrates on analyzing country-level trends. By incorporating this variable, insights into cross-cultural variations in customer judgments can be gained.
 
 ## Research question
 
@@ -13,13 +20,15 @@ _To what extent does (i) the presence of a profile picture and (ii) the identity
 
 ## Research method
 
-The repository serves as a full research workflow, which can be described as:
+The repository serves as a comprehensive research workflow, which can be outlined as follows:
 1. Data exploration 
 2. Data preperation 
 3. Analysis 
 4. Evaluation and deployment 
 
-All of these steps have first been taken manually and then optimized and automated. The data which is used for the analysis is pubicly avalaible and anyone can easily redo the full analysis with the required software installed. The data which is being used is in the `listings.csv.gz` files on [Inside Airbnb](http://insideairbnb.com/get-the-data). The variables of interest to this project have been listed in the table below:
+Initially, these steps were conducted manually and later optimized and automated. The dataset used for analysis is publicly available and can be easily replicated with the necessary software installed
+The primary data source of the project is the `listings.csv.gz` files on [Inside Airbnb](http://insideairbnb.com/get-the-data).   
+The variables of interest to this project have been listed in the table below:
 
 |Variable                        |Description                                                                                     |
 |--------------------------------|------------------------------------------------------------------------------------------------|
@@ -28,20 +37,21 @@ All of these steps have first been taken manually and then optimized and automat
 |host_location                   |The location of the listing, specified by city                                                       
 |review_scores_rating            |The star rating left by customers on the listing                                                    |
 
-As the unit of analysis in this project is focused on hosts and the country which the listing is situated in, the `host_location` variable has been operationalized to generalize to country level, instead of city level. For this there has been created a new variable called `Country_Dataset`, with the corresponding country in each row. All of these variables will show up (in Rstudio) after running the second script in the `src` folder, in case the other variables are to be inspected for other research opportunities.
-
+As the unit of analysis in this project is focused on hosts and the country which the listing is situated in, the `host_location` variable has been operationalized to generalize to country level. Consequently, a new variable named `Country_Dataset` has been created, assigning each listing to its corresponding country. All variables will be accessible in RStudio after running the `france_greece_dataset.R` file, allowing for further exploration and potential research opportunities.
 
 ## Relevance
-The insights of this project are mostly useful for (potential) Airbnb hosts, which show the importance of having a profile picure and a verified account. It could convince them to apply these aspects, if their ratings will increase from this. Other stakeholders are Airbnb and similar hosting companies. 
+The insights generated from this project hold particular relevance for (potential) Airbnb hosts, emphasizing the importance of a profile picture and obtaining a verified account. By demonstrating the potential impact of these factors on their ratings, hosts may be motivated to prioritize these aspects to enhance their listing's performance.
+
+Additionally, stakeholders such as Airbnb and similar hosting companies could gain advantages from the findings of this project. Insights from the analysis could inform platform enhancements or policy adjustments aimed at improving user experience and overall satisfaction.
 
 ## Repository overview
-The scripts which need to be executed have been numbered, to show in which order they should be executed.
-
-- src
-    1. Webscraper_to_extract_Inside_Airbnb_dataset_download_URLs_and_create_csv.py
-    2. Downloading_Inside_Airbnb_dataset_and_creating_France_Greece_dataset.R
-    3. Review_all_the_selected_variables.R
-    4. Analyse_the_data_and_create_report.R
+- src  
+    - clean_dataset.R  
+    - data_exploration.R
+    - france_greece_dataset.R
+    - regression_analysis.R
+    - visualization.R
+    - webscraper_urls.py
 - .gitignore
 - LICENSE
 - makefile
@@ -49,14 +59,17 @@ The scripts which need to be executed have been numbered, to show in which order
 
 ## Dependencies
 
-Before executing the scripts, the software programs and packages need to be installed. Instructions for downloading these are available on http://tilburgsciencehub.com/. 
-The required programs are [Python](https://tilburgsciencehub.com/topics/computer-setup/software-installation/python/python/), [R & RStudio](https://tilburgsciencehub.com/topics/computer-setup/software-installation/rstudio/r/), [Git](https://tilburgsciencehub.com/topics/automation/version-control/start-git/git/) and [Make](https://tilburgsciencehub.com/topics/automation/automation-tools/makefiles/make/). The additonal required packages are:
+Before executing the scripts, certain software programs and packages need to be installed. Instructions for downloading these are available on http://tilburgsciencehub.com/.   
+The required programs are [Python](https://tilburgsciencehub.com/topics/computer-setup/software-installation/python/python/), [R & RStudio](https://tilburgsciencehub.com/topics/computer-setup/software-installation/rstudio/r/), [Git](https://tilburgsciencehub.com/topics/automation/version-control/start-git/git/) and [Make](https://tilburgsciencehub.com/topics/automation/automation-tools/makefiles/make/).   
+
+The additonal required packages are:
 
 **Python:** 
 ```
 pip install requests 
 pip install beautifulsoup 
 pip install pandas 
+pip install os
 ```
 
 **R:**
@@ -70,11 +83,11 @@ install.packages("knitr")
 install.packages("kableExtra")
 install.packages("readr")
 install.packages("tinytex")
-tinytex::install_tinytex()
+install.packages("pandoc")
 ```
 
 ## Running the code
-After cloning the repository, the scripts will generate multiple files of output by making use of _make_. The output will generate in the new `output` folder. This is where a copy of the raw data will be stored as well as the datasets with our selected variables. Moreover, the evaluations will generate automatically by knitting the Rmarkdown file into PDFs. All of the specific code functionality is explained in the code files. 
+After cloning the repository, the scripts will generate multiple folders and files by making use of the `makefile`.  The output will generate in the new `data` and `gen` folders. The `data` folder is used as a starting point, which generates a list URLs after running `webscraper_urls.py`. `france_greece_dataset.R` will generate our selected datasets (France and Greece cities) into the `gen/data_preperation` folder. This is also where `project_dataset.csv` will generate, which combines all of these files. The (`data_exploration.Rmd`) explores this data, by making use of an `Rmarkdown` script. This generates a PDF with exploratory data analysis, into the `src` file, which will be moved to the `gen` folder later on with the `makefile`. `clean_dataset.R` will narrow down this file with only the selected variables of this project. Then, `regression_analysis.R` will analyse the relationship and `visualization.Rmd` will report the outcomes. The plots are generated into `gen/analysis/output`. As mentioned before, These steps have been automated with the `makefile`. Follow the tutorial below to automatically generate all the data/ 
 
 ### Tutorial 
 1. Create a (local) repository where the cloned files will be stored
@@ -87,17 +100,19 @@ git clone https://github.com/course-dprep/The_impact_of_Airbnb_hosts_on_guest_re
 ```
 make
 ```
-This will take a couple minutes to run, as the whole pipeline is being run. 
-5. Now you can look at the results in the newly created `...` folder 
+This will take a couple minutes to run, as the whole research pipeline is being run.   
+
+5. Now you can look at the results in the newly created `gen` folder. 
 
 ### Other functions
-The makefile has been structured to also execute the scripts seperately. To run only script 1 for example, just type: 
-```
-make 1.webscraper_to_extract_Inside_Airbnb_dataset_download_URLs_and_create_csv.py
-```
-To clean the output, type:
+To clean the output, type this into the command line:
 ```
 make clean
+```
+
+To see the "to-be-executed" scripts, type:
+```
+make -n
 ```
 
 ## Authors

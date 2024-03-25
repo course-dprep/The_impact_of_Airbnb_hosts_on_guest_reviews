@@ -3,6 +3,7 @@ title: "Data_exploration"
 author: "Group_4"
 date: "2024-03-23"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
@@ -26,8 +27,7 @@ library(pandoc)
 
 ```{r, include=FALSE}
 # Download the data 
-all_data <- read_csv("../gen/project_dataset.csv")
-
+all_data <- read_csv("../gen/data_preparation/output/project_dataset.csv")
 ```
 
 ## Summary statistics
