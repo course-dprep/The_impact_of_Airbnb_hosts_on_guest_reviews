@@ -6,3 +6,7 @@
 
 # Excluding Rhistory files
 *.Rhistory
+
+# Excluding Rdata
+*.Rdata
+
