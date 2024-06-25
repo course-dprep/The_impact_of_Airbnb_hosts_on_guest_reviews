@@ -111,3 +111,4 @@ pays_basque_selected_data <- Create_Region_Dataset(url_Pays_Basque, "Pays Basque
 # Combining all the selected regions of Greece and France together to make a dataset called 'France_Greece_selected_data' in csv form
 airbnb_URLs <- bind_rows(athens_selected_data, crete_selected_data, south_aegean_selected_data, thessaloniki_selected_data, bordeaux_selected_data, lyon_selected_data, paris_selected_data, pays_basque_selected_data)
 write.csv(airbnb_URLs, "../gen/data_preparation/output/project_dataset.csv", row.names = FALSE)
+
