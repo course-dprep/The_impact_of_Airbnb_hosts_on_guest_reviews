@@ -5,10 +5,10 @@ library(tidyverse)
 library(data.table)
 
 # Creating a place to save the files
-dir.create('gen')
-dir.create('gen/data_preparation')
-dir.create('gen/data_preparation/input')
-dir.create('gen/data_preparation/output')
+dir.create('../gen')
+dir.create('../gen/data_preparation')
+dir.create('../gen/data_preparation/input')
+dir.create('../gen/data_preparation/output')
 
 # Wrangling the data
 
@@ -65,7 +65,7 @@ get_region_url <- function(region_name) {
 # Creating a function that wrangles the dataset to our selected regions and returns the selected data
 Create_Region_Dataset <- function(url, region, country) {
   # Downloading the needed dataset from the url and saving it to our wanted file
-  file_name <- paste0("gen/data_preparation/input/", region, ".csv")
+  file_name <- paste0("../gen/data_preparation/input/", region, ".csv")
   if (!file.exists(file_name)) {
     message("Downloading file from ", url)
     tryCatch(download.file(url, file_name, mode = "wb"), 
@@ -84,7 +84,7 @@ Create_Region_Dataset <- function(url, region, country) {
     mutate(Region_Dataset = region, Country_Dataset = country)
   
   # Define a new filename for the modified dataset and saving location
-  modified_file_name <- paste0("gen/data_preparation/output/", region, "_selected.csv")
+  modified_file_name <- paste0("../gen/data_preparation/output/", region, "_selected.csv")
   
   # Add this new selection to the dataset
   message("Writing to CSV file...")
@@ -110,4 +110,4 @@ pays_basque_selected_data <- Create_Region_Dataset(url_Pays_Basque, "Pays Basque
 
 # Combining all the selected regions of Greece and France together to make a dataset called 'France_Greece_selected_data' in csv form
 airbnb_URLs <- bind_rows(athens_selected_data, crete_selected_data, south_aegean_selected_data, thessaloniki_selected_data, bordeaux_selected_data, lyon_selected_data, paris_selected_data, pays_basque_selected_data)
-write.csv(airbnb_URLs, "gen/data_preparation/output/project_dataset.csv", row.names = FALSE)
+write.csv(airbnb_URLs, "../gen/data_preparation/output/project_dataset.csv", row.names = FALSE)

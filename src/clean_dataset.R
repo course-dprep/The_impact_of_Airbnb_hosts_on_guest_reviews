@@ -3,7 +3,7 @@ library(dplyr)
 library(tidyverse)
 
 # Creating a data frame from the csv file
-df <- read.csv("gen/data_preparation/output/project_dataset.csv")
+df <- read.csv("../gen/data_preparation/output/project_dataset.csv")
 
 # Check unique values in the columns
 unique(df$host_has_profile_pic)
@@ -23,4 +23,4 @@ df <- df %>%
   ))
 
 # Save the modified DataFrame to a new CSV file
-write.csv(df, "gen/data_preparation/output/selected_dataset.csv", row.names = FALSE)
+write.csv(df, "../gen/data_preparation/output/selected_dataset.csv", row.names = FALSE)
